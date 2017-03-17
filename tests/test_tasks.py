@@ -1302,7 +1302,6 @@ class ImageBuildDockerTasksTestCase(unittest.TestCase):
                 deploy_kwargs=dict(force=True, backup=True, tag='tag'),
                 init_kwargs=dict(registry='host:4000', ssh_tunnel_port=1234, build_path='foo', account='account'),
                 expected_calls=[
-                    # mock.call.local('docker build --tag host:4000/account/test:tag --pull foo', quiet=False, use_cache=True),
                     mock.call.local(mock.ANY, quiet=False, use_cache=True),
                     mock.call.local('for img in $(docker images --filter "dangling=true" --quiet); do docker rmi "$img"; done', ignore_errors=True),
                     mock.call.local('docker push host:4000/account/test:tag', quiet=False, use_cache=True),
