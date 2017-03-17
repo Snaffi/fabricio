@@ -8,6 +8,7 @@ with open('README.rst') as description:
 
 required_six_version = (1,4,0)
 required_setuptools_version = (18,5)
+required_pyparsing_version = (2,0,1)
 
 install_requires = [
     'Fabric>=1.1,<2.0',
@@ -34,6 +35,14 @@ except ImportError:
     installed_setuptools_version = ()
 if installed_setuptools_version >= required_setuptools_version:
     install_requires.append('setuptools=={}'.format(setuptools.__version__))
+
+try:
+    import pyparsing
+    installed_pyparsing_version = tuple(map(int, pyparsing.__version__.split('.')))
+except ImportError:
+    installed_pyparsing_version = ()
+if installed_pyparsing_version >= required_pyparsing_version:
+    install_requires.append('pyparsing=={}'.format(setuptools.__version__))
 
 if sys.version_info < (2,7):
     install_requires.append(
