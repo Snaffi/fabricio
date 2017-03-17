@@ -42,7 +42,7 @@ try:
 except ImportError:
     installed_pyparsing_version = ()
 if installed_pyparsing_version >= required_pyparsing_version:
-    install_requires.append('pyparsing=={}'.format(setuptools.__version__))
+    install_requires.append('pyparsing=={}'.format(pyparsing.__version__))
 
 if sys.version_info < (2,7):
     install_requires.append(
