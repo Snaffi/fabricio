@@ -1,7 +1,10 @@
+import importlib
 import sys
 
 from distutils.core import setup
 from setuptools import find_packages
+
+from fabricio import __version__
 
 with open('README.rst') as description:
     long_description = description.read()
@@ -18,31 +21,29 @@ install_requires = [
     'dpath>=1.4.0',
 ]
 
-try:
-    import six
-    installed_six_version = tuple(map(int, six.__version__.split('.')))
-except ImportError:
-    installed_six_version = ()
-if installed_six_version >= required_six_version:
-    install_requires.append('six=={}'.format(six.__version__))
-else:
-    install_requires.append('six>=1.4.0')
+min_fixed_versions = {
+    'six': (1,4,0),
+    'setuptools': (18,5),
+    'pyparsing': (2,0,1),
+}
 
-try:
-    import setuptools
-    installed_setuptools_version = tuple(map(int, setuptools.__version__.split('.')))
-except ImportError:
-    installed_setuptools_version = ()
-if installed_setuptools_version >= required_setuptools_version:
-    install_requires.append('setuptools=={}'.format(setuptools.__version__))
+for module_name, min_version in min_fixed_versions.items():
+    try:
+        module = importlib.import_module(module_name)
+        installed_version = tuple(map(int, module.__version__.split('.')))
+    except ImportError:
+        installed_version = ()
 
-try:
-    import pyparsing
-    installed_pyparsing_version = tuple(map(int, pyparsing.__version__.split('.')))
-except ImportError:
-    installed_pyparsing_version = ()
-if installed_pyparsing_version >= required_pyparsing_version:
-    install_requires.append('pyparsing=={}'.format(pyparsing.__version__))
+    if installed_version >= min_version:
+        install_requires.append('{module}=={version}'.format(
+            module=module_name,
+            version='.'.join(map(str, installed_version)),
+        ))
+    else:
+        install_requires.append('{module}>={version}'.format(
+            module=module_name,
+            version='.'.join(map(str, min_version)),
+        ))
 
 if sys.version_info < (2,7):
     install_requires.append(
@@ -51,7 +52,7 @@ if sys.version_info < (2,7):
 
 setup(
     name='fabricio',
-    version='0.3.24',
+    version=__version__,
     author='Rinat Khabibiev',
     author_email='srenskiy@gmail.com',
     packages=list(map('fabricio.'.__add__, find_packages('fabricio'))) + ['fabricio'],

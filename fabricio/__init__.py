@@ -6,6 +6,8 @@ from fabric import colors, api as fab
 
 from fabricio import utils
 
+__version__ = "0.3.24"
+
 fab.env.setdefault('infrastructure', None)
 
 
