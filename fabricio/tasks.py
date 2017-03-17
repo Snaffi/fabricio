@@ -767,15 +767,31 @@ class ImageBuildDockerTasks(DockerTasks):
     @fab.task
     @fab.hosts()
     @fab.roles()
-    def prepare(self, tag=None, no_cache=False):
+    def prepare(self, tag=None, no_cache=None, **kwargs):
         """
-        build Docker image
+        build Docker image (see 'docker build --help' for available options)
         """
-        options = utils.Options([
-            ('tag', self.image[self.registry:tag:self.account]),
-            ('no-cache', utils.strtobool(no_cache)),
-            ('pull', True),
-        ])
+        if no_cache is not None:
+            warnings.warn(
+                'no_cache param deprecated and will be removed in v0.4, '
+                'use no-cache instead', category=RuntimeWarning,
+            )
+            kwargs.setdefault('no-cache', no_cache)
+
+        for key, value in kwargs.items():
+            try:
+                kwargs[key] = utils.strtobool(value)
+            except ValueError:
+                pass
+
+        # default options
+        kwargs.setdefault('pull', True)
+        kwargs.setdefault('force-rm', True)
+
+        options = utils.Options(
+            tag=self.image[self.registry:tag:self.account],
+            **kwargs
+        )
         fabricio.local(
             'docker build {options} {build_path}'.format(
                 build_path=self.build_path,
