@@ -98,14 +98,8 @@ Install
 
 .. code:: bash
 
-    pip install --upgrade fabricio
+    [sudo] pip install --upgrade fabricio
     
-*For system-wide installation macOS users should explicitly provide versions of 'six' and 'setuptools' packages installed on their system. For example:*
-
-.. code:: bash
-
-    sudo pip install --upgrade fabricio six==1.4.1 setuptools==18.5
-
 Roles and infrastructures
 =========================
 

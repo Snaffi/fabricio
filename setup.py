@@ -6,14 +6,34 @@ from setuptools import find_packages
 with open('README.rst') as description:
     long_description = description.read()
 
+required_six_version = (1,4,0)
+required_setuptools_version = (18,5)
+
 install_requires = [
     'Fabric>=1.1,<2.0',
     'frozendict>=1.2,<2.0',
     'cached-property>=1.3',
     'docker-py>=1.8.1,<2.0',
-    'six>=1.4.0',
     'dpath>=1.4.0',
 ]
+
+try:
+    import six
+    installed_six_version = tuple(map(int, six.__version__.split('.')))
+except ImportError:
+    installed_six_version = ()
+if installed_six_version >= required_six_version:
+    install_requires.append('six=={}'.format(six.__version__))
+else:
+    install_requires.append('six>=1.4.0')
+
+try:
+    import setuptools
+    installed_setuptools_version = tuple(map(int, setuptools.__version__.split('.')))
+except ImportError:
+    installed_setuptools_version = ()
+if installed_setuptools_version >= required_setuptools_version:
+    install_requires.append('setuptools=={}'.format(setuptools.__version__))
 
 if sys.version_info < (2,7):
     install_requires.append(
