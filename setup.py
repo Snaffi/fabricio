@@ -41,9 +41,9 @@ for module_name, min_version in min_fixed_versions.items():
         installed_version = ()
 
     if installed_version >= min_version:
-        install_requires[module] = '==' + module.__version__
+        install_requires[module_name] = '==' + module.__version__
     else:
-        install_requires[module] = '>=' + '.'.join(map(str, min_version))
+        install_requires[module_name] = '>=' + '.'.join(map(str, min_version))
 
 if sys.version_info < (2,7):
     install_requires['ordereddict'] = '>=1.1'
