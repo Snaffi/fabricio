@@ -98,7 +98,13 @@ Install
 
 .. code:: bash
 
-    [sudo] pip install --upgrade fabricio
+    pip install --upgrade fabricio
+
+On macOS and Linux use ``sudo`` if you wish to install Fabricio as a system service:
+
+.. code:: bash
+
+    sudo pip install --upgrade fabricio
     
 Roles and infrastructures
 =========================
