@@ -4,7 +4,7 @@ import sys
 from distutils.core import setup
 from setuptools import find_packages
 
-from fabricio import __version__
+from fabricio.version import __version__
 
 with open('README.rst') as description:
     long_description = description.read()

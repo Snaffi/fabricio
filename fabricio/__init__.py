@@ -5,8 +5,7 @@ import warnings
 from fabric import colors, api as fab
 
 from fabricio import utils
-
-__version__ = "0.3.24"
+from fabricio.version import __version__
 
 fab.env.setdefault('infrastructure', None)
 
