@@ -1,5 +1,4 @@
-import importlib
-import re
+import pkg_resources
 import sys
 
 from distutils.core import setup
@@ -23,27 +22,25 @@ install_requires = {
     'six': '>=1.4.0',
 }
 
-min_fixed_versions = {
-    'six': (1,4,0),
-    'setuptools': (18,5),
-    'pyparsing': (2,0,1),
+min_suited_versions = {
+    'six': '1.4.0',
+    'setuptools': '18.5',
+    'pyparsing': '2.0.1',
 }
 
-for module_name, min_version in min_fixed_versions.items():
+for dist, version in min_suited_versions.items():
     try:
-        module = importlib.import_module(module_name)
-        version_found = re.match(r'[\\.\d]+', getattr(module, '__version__', ''))
-        if not version_found:
+        distribution = pkg_resources.get_distribution(dist)
+        if not distribution.has_version():
             continue
-        version = version_found.group(0)
-        installed_version = tuple(map(int, version.split('.')))
-    except ImportError:
-        installed_version = ()
+        installed_version = pkg_resources.parse_version(distribution.version)
+    except pkg_resources.DistributionNotFound:
+        installed_version = None
 
-    if installed_version >= min_version:
-        install_requires[module_name] = '==' + module.__version__
+    if installed_version and installed_version >= pkg_resources.parse_version(version):
+        install_requires[dist] = '==' + distribution.version
     else:
-        install_requires[module_name] = '>=' + '.'.join(map(str, min_version))
+        install_requires[dist] = '>=' + version
 
 if sys.version_info < (2,7):
     install_requires['ordereddict'] = '>=1.1'
