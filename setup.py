@@ -4,7 +4,8 @@ import sys
 from distutils.core import setup
 from setuptools import find_packages
 
-from fabricio.version import __version__
+package = {}
+exec(open('fabricio/version.py').read(), package)
 
 with open('README.rst') as description:
     long_description = description.read()
@@ -47,7 +48,7 @@ if sys.version_info < (2,7):
 
 setup(
     name='fabricio',
-    version=__version__,
+    version=package['__version__'],
     author='Rinat Khabibiev',
     author_email='srenskiy@gmail.com',
     packages=list(map('fabricio.'.__add__, find_packages('fabricio'))) + ['fabricio'],
