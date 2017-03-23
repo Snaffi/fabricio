@@ -10,10 +10,6 @@ exec(open('fabricio/version.py').read(), package)
 with open('README.rst') as description:
     long_description = description.read()
 
-required_six_version = (1,4,0)
-required_setuptools_version = (18,5)
-required_pyparsing_version = (2,0,1)
-
 install_requires = {
     'Fabric': '>=1.1,<2.0',
     'frozendict': '>=1.2,<2.0',
