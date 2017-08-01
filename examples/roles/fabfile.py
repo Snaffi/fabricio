@@ -1,10 +1,12 @@
+import fabricio
+
 from fabric import api as fab
 from fabricio import tasks, docker
 from fabricio.misc import AvailableVagrantHosts
 
 fab.env.roledefs.update(
     # you can set default roles definitions here
-    web=['localhost'],
+    web=[],
 )
 
 
@@ -13,6 +15,19 @@ def vagrant():
     fab.env.update(
         roledefs={
             'web': AvailableVagrantHosts(),
+        },
+    )
+
+
+@tasks.infrastructure
+def localhost():
+    # monkeypatching `run` method to be able to run docker commands
+    # on localhost instead of remote server
+    fabricio.run = fabricio.local
+
+    fab.env.update(
+        roledefs={
+            'web': ['localhost'],
         },
     )
 

@@ -65,7 +65,7 @@ def run(
 run.cache = {}
 
 
-def local(command, use_cache=False, **kwargs):
+def local(command, use_cache=False, capture=True, **kwargs):
     if use_cache:
         md5 = hashlib.md5()
         md5.update(command)
@@ -75,6 +75,7 @@ def local(command, use_cache=False, **kwargs):
     result = _command(
         fabric_method=fab.local,
         command=command,
+        capture=capture,
         **kwargs
     )
     if use_cache:
