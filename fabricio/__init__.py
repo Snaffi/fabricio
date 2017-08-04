@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import hashlib
 import sys
 import warnings
@@ -65,7 +67,7 @@ def run(
 run.cache = {}
 
 
-def local(command, use_cache=False, capture=True, **kwargs):
+def local(command, use_cache=False, quiet=True, **kwargs):
     if use_cache:
         md5 = hashlib.md5()
         md5.update(command)
@@ -75,11 +77,16 @@ def local(command, use_cache=False, capture=True, **kwargs):
     result = _command(
         fabric_method=fab.local,
         command=command,
-        capture=capture,
+        capture=True,
         **kwargs
     )
     if use_cache:
         local.cache[cache_key] = result
+    if not quiet:
+        if result:
+            print(result)
+        if result.stderr:
+            print(result.stderr, file=sys.stderr)
     return result
 local.cache = {}
 
