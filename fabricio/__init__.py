@@ -81,13 +81,13 @@ def local(
     quiet=True,
     capture=False,
     use_cache=False,
-    cache_key='',
+    cache_salt='',
     **kwargs
 ):
     if use_cache:
         md5 = hashlib.md5()
         md5.update(command)
-        md5.update(cache_key)
+        md5.update(cache_salt)
         cache_key = md5.digest()
         if cache_key in local.cache:
             return local.cache[cache_key]
