@@ -42,14 +42,21 @@ def run(
     stdout=sys.stdout,
     stderr=sys.stderr,
     use_cache=False,
+    cache_salt='',
     cache_key='',
     **kwargs
 ):
+    if cache_key:
+        warnings.warn(
+            "'cache_key' param is deprecated and will be removed in v0.4, "
+            "use 'cache_salt' instead", RuntimeWarning, stacklevel=2,
+        )
+        cache_salt = cache_salt or cache_key
     if use_cache:
         md5 = hashlib.md5()
         md5.update(command)
         md5.update(fab.env.host or '')
-        md5.update(cache_key)
+        md5.update(cache_salt)
         cache_key = md5.digest()
         if cache_key in run.cache:
             return run.cache[cache_key]
