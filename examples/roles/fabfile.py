@@ -1,3 +1,5 @@
+import functools
+
 import fabricio
 
 from fabric import api as fab
@@ -23,7 +25,7 @@ def vagrant():
 def localhost():
     # monkeypatching `run` method to be able to run docker commands
     # on localhost instead of remote server
-    fabricio.run = fabricio.local
+    fabricio.run = functools.partial(fabricio.local, capture=True)
 
     fab.env.update(
         roledefs={

@@ -67,7 +67,7 @@ def run(
 run.cache = {}
 
 
-def local(command, use_cache=False, quiet=True, **kwargs):
+def local(command, use_cache=False, capture=False, quiet=True, **kwargs):
     if use_cache:
         md5 = hashlib.md5()
         md5.update(command)
@@ -77,12 +77,12 @@ def local(command, use_cache=False, quiet=True, **kwargs):
     result = _command(
         fabric_method=fab.local,
         command=command,
-        capture=True,
+        capture=capture,
         **kwargs
     )
     if use_cache:
         local.cache[cache_key] = result
-    if not quiet:
+    if capture and not quiet:
         if result:
             print(result)
         if result.stderr:
