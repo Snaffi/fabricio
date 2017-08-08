@@ -78,6 +78,7 @@ def local(command, use_cache=False, capture=False, quiet=True, **kwargs):
         fabric_method=fab.local,
         command=command,
         capture=capture,
+        quiet=quiet,
         **kwargs
     )
     if use_cache:
