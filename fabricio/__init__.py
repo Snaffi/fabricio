@@ -67,10 +67,20 @@ def run(
 run.cache = {}
 
 
-def local(command, use_cache=False, capture=False, quiet=True, **kwargs):
+def local(
+    command,
+    stdout=sys.stdout,
+    stderr=sys.stderr,
+    quiet=True,
+    capture=False,
+    use_cache=False,
+    cache_key='',
+    **kwargs
+):
     if use_cache:
         md5 = hashlib.md5()
         md5.update(command)
+        md5.update(cache_key)
         cache_key = md5.digest()
         if cache_key in local.cache:
             return local.cache[cache_key]
@@ -85,9 +95,9 @@ def local(command, use_cache=False, capture=False, quiet=True, **kwargs):
         local.cache[cache_key] = result
     if capture and not quiet:
         if result:
-            print(result)
+            print(result, file=stdout)
         if result.stderr:
-            print(result.stderr, file=sys.stderr)
+            print(result.stderr, file=stderr)
     return result
 local.cache = {}
 
